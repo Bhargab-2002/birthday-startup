@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Parisienne&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --rose: #f9a8c9;
+    --blush: #fcd5e0;
+    --peach: #fddbb4;
+    --lavender: #d8b4fe;
+    --lilac: #e9d5ff;
+    --cream: #fff7f0;
+    --text-dark: #5a2d4e;
+    --text-mid: #8b4a6b;
+    --glass: rgba(255,255,255,0.25);
+    --glass-border: rgba(255,255,255,0.5);
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Cormorant Garamond', serif;
+    background: #fce4ec;
+    cursor: none;
+  }
+
+  /* ── Custom Cursor ── */
+  .cursor {
+    position: fixed; width: 18px; height: 18px;
+    background: radial-gradient(circle, #f472b6, #c084fc);
+    border-radius: 50%; pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s;
+    mix-blend-mode: multiply;
+  }
+  .cursor-trail {
+    position: fixed; width: 8px; height: 8px;
+    background: rgba(244,114,182,0.4);
+    border-radius: 50%; pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: all 0.3s ease;
+  }
+
+  /* ── SCREENS ── */
+  .screen {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1);
+  }
+  .screen.active { opacity: 1; pointer-events: all; }
+
+  /* ── ANIMATED BG GRADIENT ── */
+  .gradient-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 30%, #fce4ec 60%, #fff3e0 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+  }
+  @keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* ── PARTICLES CANVAS ── */
+  #particleCanvas {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  }
+
+  /* ── FLOATING ELEMENTS ── */
+  .floaties {
+    position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+  }
+  .float-heart {
+    position: absolute; bottom: -60px; font-size: 1.4rem;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.8; }
+    50%  { transform: translateY(-45vh) rotate(15deg) scale(1.1); opacity: 0.6; }
+    100% { transform: translateY(-100vh) rotate(-10deg) scale(0.8); opacity: 0; }
+  }
+
+  /* ── SCREEN 1: HERO ── */
+  #hero {
+    z-index: 10; flex-direction: column; text-align: center; padding: 2rem;
+  }
+  .hero-inner {
+    position: relative; z-index: 3;
+    display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+    overflow: visible;
+    padding-left: 10px;
+  }
+  .hero-badge {
+    font-family: 'Parisienne', cursive;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--text-mid); letter-spacing: 0.15em;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px); padding: 0.4rem 1.4rem; border-radius: 50px;
+    animation: fadeSlideDown 1s 0.3s both;
+  }
+  .hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 8vw, 6rem);
+
+  line-height: 1.2; /* increase from 1.1 */
+  padding-bottom: 10px; /* prevent bottom cut */
+
+  background: linear-gradient(135deg, #ec4899, #a855f7, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  filter: drop-shadow(0 4px 24px rgba(236,72,153,0.25));
+  animation: bounceIn 1.2s 0.6s both;
+}
+  .hero-name {
+  font-family: 'Parisienne', cursive;
+  font-size: clamp(2rem, 6vw, 4.5rem);
+
+  line-height: 1.3;
+  padding-left: 10px;
+
+  color: #c026d3;
+  filter: drop-shadow(0 2px 16px rgba(192,38,211,0.35));
+  animation: bounceIn 1.2s 0.9s both;
+}
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--text-mid);
+    font-style: italic; letter-spacing: 0.03em;
+    max-width: 480px; line-height: 1.7;
+    animation: fadeSlideUp 1s 1.3s both;
+  }
+  .hero-divider {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, #f9a8d4, transparent);
+    border-radius: 2px;
+    animation: fadeIn 1s 1.5s both;
+  }
+  .btn-surprise {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 1rem 2.4rem; border: none; cursor: none;
+    font-family: 'Playfair Display', serif; font-size: 1.1rem; letter-spacing: 0.05em;
+    color: white;
+    background: linear-gradient(135deg, #ec4899, #a855f7);
+    border-radius: 60px;
+    box-shadow: 0 8px 32px rgba(168,85,247,0.35), 0 0 0 0 rgba(236,72,153,0.5);
+    animation: fadeSlideUp 1s 1.7s both, pulse-glow 3s 2.7s ease-in-out infinite;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-surprise::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+    border-radius: 60px;
+  }
+  .btn-surprise:hover { transform: scale(1.05) translateY(-2px); }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 8px 32px rgba(168,85,247,0.35), 0 0 0 0 rgba(236,72,153,0.4); }
+    50%  { box-shadow: 0 12px 40px rgba(168,85,247,0.5), 0 0 0 12px rgba(236,72,153,0); }
+  }
+  @keyframes bounceIn {
+    0%   { opacity: 0; transform: scale(0.7) translateY(20px); }
+    60%  { opacity: 1; transform: scale(1.05) translateY(-5px); }
+    80%  { transform: scale(0.97) translateY(2px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── TRANSITION OVERLAY ── */
+  .transition-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: radial-gradient(ellipse at center, #f9a8d4, #e879f9, #a855f7);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.6s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .transition-overlay.show { opacity: 1; pointer-events: all; }
+  .transition-burst {
+    font-size: 4rem;
+    animation: burstSpin 0.8s ease forwards;
+    opacity: 0;
+  }
+  @keyframes burstSpin {
+    0%   { opacity: 0; transform: scale(0) rotate(-180deg); }
+    60%  { opacity: 1; transform: scale(1.3) rotate(10deg); }
+    100% { opacity: 0; transform: scale(2) rotate(20deg); }
+  }
+
+  /* ── SCREEN 2: MEMORIES ── */
+  #memories {
+    z-index: 10; align-items: flex-start;
+    overflow-y: auto; overflow-x: hidden;
+    padding: 3rem 1.5rem 4rem;
+    -ms-overflow-style: none; scrollbar-width: none;
+    pointer-events: none;
+  }
+  #memories::-webkit-scrollbar { display: none; }
+  #memories.active { pointer-events: all; }
+  .memories-inner {
+    position: relative; z-index: 3;
+    width: 100%; max-width: 720px; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; gap: 2.5rem;
+  }
+  .memories-header {
+    text-align: center;
+    animation: fadeSlideDown 1s 0.2s both;
+  }
+  .memories-label {
+    font-family: 'Parisienne', cursive;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    color: var(--text-mid); letter-spacing: 0.2em;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px); padding: 0.3rem 1.2rem; border-radius: 50px;
+    display: inline-block; margin-bottom: 0.8rem;
+  }
+  .memories-title {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    background: linear-gradient(135deg, #ec4899, #a855f7);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── MEMORY CARDS (outer wrapper) ── */
+  .card {
+    width: 100%; background: var(--glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    box-shadow: 0 8px 40px rgba(236,72,153,0.12), 0 2px 12px rgba(0,0,0,0.06);
+    padding: 1.8rem; display: flex; flex-direction: column; gap: 1.2rem;
+    opacity: 0; transform: translateY(40px) scale(0.97);
+    transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s, opacity 0.6s;
+    position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #f9a8d4, #e879f9, #fbbf24);
+    border-radius: 28px 28px 0 0;
+  }
+  .card.reveal { opacity: 1; transform: translateY(0) scale(1); }
+  .card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 60px rgba(236,72,153,0.2), 0 0 0 1px rgba(255,255,255,0.6);
+  }
+  .card-number {
+    font-family: 'Parisienne', cursive;
+    font-size: 0.9rem; color: var(--text-mid); letter-spacing: 0.1em;
+  }
+
+  /* ── FLIP IMAGE ZONE ── */
+  .flip-zone {
+    width: 100%; aspect-ratio: 16/9;
+    perspective: 1000px;
+    cursor: none;
+    border-radius: 18px;
+  }
+  .flip-inner {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.75s cubic-bezier(0.4, 0.2, 0.2, 1);
+    border-radius: 18px;
+  }
+  .flip-zone.flipped .flip-inner {
+    transform: rotateY(180deg);
+  }
+
+  /* FRONT FACE */
+  .flip-front, .flip-back {
+    position: absolute; inset: 0;
+    border-radius: 18px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+  }
+  .flip-front {
+    background: linear-gradient(135deg, #fce4ec, #f3e5f5);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.06);
+  }
+  .flip-front img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .flip-zone:hover .flip-front img { transform: scale(1.04); }
+  .card-emoji-placeholder {
+    font-size: 5rem; opacity: 0.6;
+    animation: gentlePulse 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  /* Flip hint overlay on front */
+  .flip-hint {
+    position: absolute; bottom: 10px; right: 12px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 20px; padding: 0.25rem 0.75rem;
+    font-size: 0.72rem; color: var(--text-mid);
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    letter-spacing: 0.06em; pointer-events: none;
+    display: flex; align-items: center; gap: 0.3rem;
+    transition: opacity 0.3s;
+  }
+  .flip-zone.flipped .flip-hint { opacity: 0; }
+
+  /* BACK FACE */
+.flip-back {
+  transform: rotateY(180deg);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 🔥 changed */
+
+  padding: clamp(1rem, 4vw, 1.6rem);
+  text-align: center;
+
+  background: linear-gradient(145deg, #fff0f7, #f5e6ff, #fff7f0);
+  border: 1px solid rgba(249,168,212,0.35);
+
+  gap: clamp(0.6rem, 2vw, 0.9rem);
+
+  overflow-y: auto; /* ✅ scroll if needed */
+  box-sizing: border-box;
+}
+
+/* ICON */
+.flip-back-icon {
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  line-height: 1;
+  animation: gentlePulse 3s ease-in-out infinite;
+}
+
+/* QUOTE TEXT */
+.flip-back-quote {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+
+  font-size: clamp(0.85rem, 2.8vw, 1.05rem);
+  line-height: 1.6;
+
+  color: var(--text-dark);
+  position: relative;
+
+  padding: 0 0.3rem; /* small breathing space */
+}
+
+/* QUOTE SYMBOL */
+.flip-back-quote::before {
+  content: '\201C';
+  font-family: 'Parisienne', cursive;
+
+  font-size: clamp(2.2rem, 6vw, 3rem);
+  color: rgba(236,72,153,0.2);
+
+  position: absolute;
+  top: -0.8rem;
+  left: -0.3rem;
+
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* DATE */
+.flip-back-date {
+  font-size: clamp(0.65rem, 2vw, 0.75rem);
+  letter-spacing: 0.1em;
+
+  color: #ec4899;
+  font-family: 'Cormorant Garamond', serif;
+
+  border-top: 1px solid rgba(236,72,153,0.2);
+  padding-top: 0.6rem;
+  width: 100%;
+}
+
+/* TAP TEXT */
+.flip-back-tap {
+  font-size: clamp(0.65rem, 2vw, 0.7rem);
+  color: var(--text-mid);
+  font-style: italic;
+  opacity: 0.6;
+}
+
+/* 🔥 MOBILE OPTIMIZATION */
+@media (max-width: 480px) {
+  .flip-back {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .flip-back-quote {
+    line-height: 1.5;
+  }
+}
+
+/* OPTIONAL: Hide scrollbar for clean UI */
+.flip-back::-webkit-scrollbar {
+  display: none;
+}
+.flip-back {
+  scrollbar-width: none;
+}
+
+  @keyframes gentlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .card-content { display: flex; flex-direction: column; gap: 0.5rem; }
+  .card-title {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1.2rem, 3vw, 1.5rem); color: var(--text-dark);
+  }
+  .card-caption {
+    font-size: clamp(0.9rem, 2.2vw, 1.05rem); color: var(--text-mid);
+    line-height: 1.75; font-weight: 300;
+  }
+  .card-tag {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-size: 0.8rem; color: #ec4899; letter-spacing: 0.08em;
+    background: rgba(249,168,212,0.2); border: 1px solid rgba(249,168,212,0.4);
+    padding: 0.2rem 0.7rem; border-radius: 20px; width: fit-content;
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+  }
+
+  /* ── FINAL WISH CARD ── */
+  .wish-card {
+    width: 100%; text-align: center; padding: 3rem 2rem;
+    background: linear-gradient(135deg, rgba(249,168,212,0.3), rgba(192,38,211,0.15), rgba(251,191,36,0.15));
+    border: 1px solid rgba(249,168,212,0.4);
+    border-radius: 32px; backdrop-filter: blur(20px);
+    box-shadow: 0 12px 50px rgba(236,72,153,0.15);
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s, transform 0.8s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .wish-card.reveal { opacity: 1; transform: translateY(0); }
+  .wish-icon { font-size: 3rem; display: block; margin-bottom: 1rem;
+    animation: heartBeat 1.5s ease-in-out infinite; }
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    14%  { transform: scale(1.15); }
+    28%  { transform: scale(1); }
+    42%  { transform: scale(1.1); }
+    56%  { transform: scale(1); }
+  }
+  .wish-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    background: linear-gradient(135deg, #ec4899, #a855f7);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 1rem;
+  }
+  .wish-text {
+    font-size: clamp(0.95rem, 2.2vw, 1.1rem); color: var(--text-mid);
+    line-height: 1.8; font-style: italic; font-weight: 300; max-width: 440px; margin: 0 auto 1.5rem;
+  }
+  .wish-sig {
+    font-family: 'Parisienne', cursive; font-size: 1.5rem; color: #ec4899;
+  }
+
+  /* ── MUSIC BUTTON ── */
+  .music-btn {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200;
+    width: 52px; height: 52px; border-radius: 50%; border: none; cursor: none;
+    background: linear-gradient(135deg, #ec4899, #a855f7);
+    color: white; font-size: 1.3rem;
+    box-shadow: 0 4px 20px rgba(168,85,247,0.4);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeIn 2s 2s both;
+  }
+  .music-btn:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(168,85,247,0.5); }
+  .music-btn.playing { animation: fadeIn 2s 2s both, musicPulse 2s ease-in-out infinite; }
+  @keyframes musicPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(168,85,247,0.4), 0 0 0 0 rgba(236,72,153,0.4); }
+    50%  { box-shadow: 0 4px 20px rgba(168,85,247,0.4), 0 0 0 10px rgba(236,72,153,0); }
+  }
+
+  /* ── MUSIC TOAST ── */
+  .music-toast {
+    position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(80px);
+    z-index: 200;
+    background: var(--glass); backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px; padding: 0.7rem 1.4rem;
+    font-size: 0.85rem; color: var(--text-dark);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+  }
+  .music-toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── SCROLL CUE ── */
+  .scroll-cue {
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    font-size: 0.8rem; color: var(--text-mid); letter-spacing: 0.1em;
+    opacity: 0; animation: fadeIn 1s 1s both;
+  }
+  .scroll-cue-arrow {
+    width: 24px; height: 24px; border-right: 2px solid var(--rose);
+    border-bottom: 2px solid var(--rose);
+    transform: rotate(45deg);
+    animation: bounceDown 1.5s ease-in-out infinite;
+  }
+  @keyframes bounceDown {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50% { transform: rotate(45deg) translateY(6px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- Animated Background -->
+<div class="gradient-bg"></div>
+<canvas id="particleCanvas"></canvas>
+<div class="floaties" id="floaties"></div>
+
+<!-- Music Button -->
+<button class="music-btn" id="musicBtn" title="Toggle music">♪</button>
+<div class="music-toast" id="musicToast">🎵 Tap to play the love song</div>
+
+<!-- Transition Overlay -->
+<div class="transition-overlay" id="transitionOverlay">
+  <span class="transition-burst" id="transitionBurst">💖</span>
+</div>
+
+<!-- ════════════════════════════════ HERO SCREEN ════════════════════════════════ -->
+<section class="screen active" id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">✨ A little something, just for you ✨</div>
+    <div class="hero-title">Happy Birthday</div>
+    <div class="hero-name">My Love 🌸</div>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">
+      For your special day, I wove together a few memories, a lot of love,
+      and a small surprise — just for you 💖
+    </p>
+    <button class="btn-surprise" id="openBtn">
+      Open Your Surprise &nbsp;🎁
+    </button>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ MEMORIES SCREEN ════════════════════════════════ -->
+<section class="screen" id="memories">
+  <div class="memories-inner">
+    <div class="memories-header">
+      <div class="memories-label">Our Story</div>
+      <h2 class="memories-title">Moments I'll Always Treasure</h2>
+    </div>
+
+    <!-- Card 1 -->
+    <article class="card" data-delay="0">
+      <div class="card-number">Memory No. 01</div>
+      <div class="flip-zone" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="images/IMG_7982.JPG" class="card-image" />
+            <div class="flip-hint">✦ tap to read the memory</div>
+          </div>
+          <div class="flip-back">
+            <div class="flip-back-icon">🌸</div>
+            <p class="flip-back-quote">I remember the exact moment I realized you were extraordinary. The way you laughed, the way your eyes lit up — I knew from that instant that my world had quietly shifted, beautifully, forever.</p>
+            <div class="flip-back-date">✦ The very beginning ✦</div>
+            <span class="flip-back-tap">tap again to see the photo</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-tag">🌸 The very beginning</div>
+        <h3 class="card-title">The Day Everything Changed</h3>
+      </div>
+    </article>
+
+    <!-- Card 2 -->
+    <article class="card" data-delay="150">
+      <div class="card-number">Memory No. 02</div>
+      <div class="flip-zone" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-front">
+           <img src="images/IMG_7984.JPG" class="card-image" />
+            <div class="flip-hint">✦ tap to read the memory</div>
+          </div>
+          <div class="flip-back">
+            <div class="flip-back-icon">💛</div>
+            <p class="flip-back-quote">Not every memory needs to be grand. Our lazy mornings, the silly conversations, the comfortable silences — these are the ones I hold closest. You make the everyday feel like a beautiful dream.</p>
+            <div class="flip-back-date">✦ Ordinary magic ✦</div>
+            <span class="flip-back-tap">tap again to see the photo</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-tag">💛 Ordinary magic</div>
+        <h3 class="card-title">The Little Moments</h3>
+      </div>
+    </article>
+
+    <!-- Card 3 -->
+    <article class="card" data-delay="300">
+      <div class="card-number">Memory No. 03</div>
+      <div class="flip-zone" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="images/IMG_7985.JPG" class="card-image" />
+            <div class="flip-hint">✦ tap to read the memory</div>
+          </div>
+          <div class="flip-back">
+            <div class="flip-back-icon">✨</div>
+            <p class="flip-back-quote">Under the same sky, hours felt like minutes with you. Every word you said, every story you shared — I could have listened to you talk until the stars went out.</p>
+            <div class="flip-back-date">✦ Starlight nights ✦</div>
+            <span class="flip-back-tap">tap again to see the photo</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-tag">✨ Starlight nights</div>
+        <h3 class="card-title">The Nights We Talked Forever</h3>
+      </div>
+    </article>
+
+    <!-- Card 4 -->
+    <article class="card" data-delay="450">
+      <div class="card-number">Memory No. 04</div>
+      <div class="flip-zone" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="images/IMG_7987.JPG" class="card-image" />
+            <div class="flip-hint">✦ tap to read the memory</div>
+          </div>
+          <div class="flip-back">
+            <div class="flip-back-icon">💜</div>
+            <p class="flip-back-quote">Watching you grow into your most radiant self has been one of the greatest privileges of my life. You are strong, tender, brilliant, and so deeply kind. You have no idea how much you glow.</p>
+            <div class="flip-back-date">✦ Growing together ✦</div>
+            <span class="flip-back-tap">tap again to see the photo</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-tag">💜 Growing together</div>
+        <h3 class="card-title">How You've Bloomed</h3>
+      </div>
+    </article>
+
+    <!-- Card 5 -->
+    <article class="card" data-delay="600">
+      <div class="card-number">Memory No. 05</div>
+      <div class="flip-zone" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="images/IMG_7990.JPG" class="card-image" />
+            <div class="flip-hint">✦ tap to read the memory</div>
+          </div>
+          <div class="flip-back">
+            <div class="flip-back-icon">🎉</div>
+            <p class="flip-back-quote">Today the world is a little brighter because you exist in it. Every candle, every wish, every celebration — it's all for you. May this year bring you everything your beautiful heart deserves.</p>
+            <div class="flip-back-date">✦ Today & always ✦</div>
+            <span class="flip-back-tap">tap again to see the photo</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-tag">🎉 Today & always</div>
+        <h3 class="card-title">Your Day — Fully, Completely Yours</h3>
+      </div>
+    </article>
+
+    <!-- Final Wish -->
+    <div class="wish-card">
+      <span class="wish-icon">💖</span>
+      <h2 class="wish-title">With All My Love</h2>
+      <p class="wish-text">
+        You are my favourite adventure, my favourite place to be, 
+        and my favourite person in the entire universe. 
+        Happy Birthday, my love. May every wish come true.
+      </p>
+      <div class="wish-sig">Always & Forever Yours 🌹</div>
+    </div>
+
+    <!-- Scroll cue -->
+    <div class="scroll-cue">
+      <span>scroll for more</span>
+      <div class="scroll-cue-arrow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Hidden audio -->
+<audio id="bgMusic" loop>
+  <source src="music/Taylor Swift - Love Story.mp3" type="audio/mp3">
+</audio>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// CURSOR
+// ══════════════════════════════════════════════════════════
+const cursor = document.getElementById('cursor');
+const trail  = document.getElementById('cursorTrail');
+let mx = 0, my = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  setTimeout(() => { trail.style.left = mx+'px'; trail.style.top = my+'px'; }, 80);
+});
+
+// ══════════════════════════════════════════════════════════
+// PARTICLES
+// ══════════════════════════════════════════════════════════
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x  = Math.random() * canvas.width;
+    this.y  = Math.random() * canvas.height;
+    this.r  = Math.random() * 3 + 1;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = -(Math.random() * 0.6 + 0.2);
+    this.life = 0; this.maxLife = Math.random() * 200 + 100;
+    this.color = ['#f9a8d4','#e879f9','#fbbf24','#a78bfa','#fda4af'][Math.floor(Math.random()*5)];
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy; this.life++;
+    if (this.life > this.maxLife || this.y < -20) this.reset();
+  }
+  draw() {
+    const a = Math.sin((this.life / this.maxLife) * Math.PI) * 0.7;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = this.color + Math.floor(a*255).toString(16).padStart(2,'0');
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) { const p = new Particle(); p.life = Math.random()*p.maxLife; particles.push(p); }
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ══════════════════════════════════════════════════════════
+// FLOATING HEARTS
+// ══════════════════════════════════════════════════════════
+const floaties = document.getElementById('floaties');
+const emojis = ['💗','💖','✨','🌸','💕','🌹','💝','⭐','🦋','🌺'];
+function spawnHeart() {
+  const el = document.createElement('div');
+  el.className = 'float-heart';
+  el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+  el.style.left  = Math.random()*100 + 'vw';
+  el.style.fontSize = (Math.random()*1.5 + 0.8) + 'rem';
+  const dur = Math.random()*8 + 8;
+  el.style.animationDuration  = dur + 's';
+  el.style.animationDelay     = Math.random()*3 + 's';
+  floaties.appendChild(el);
+  setTimeout(() => el.remove(), (dur + 3) * 1000);
+}
+setInterval(spawnHeart, 1200);
+for(let i=0;i<5;i++) spawnHeart();
+
+// ══════════════════════════════════════════════════════════
+// WEB AUDIO MUSIC
+// ══════════════════════════════════════════════════════════
+// SIMPLE AUDIO SYSTEM
+
+
+let isPlaying = false;
+
+function playMusic() {
+  const music = document.getElementById("bgMusic");
+
+  if (!isPlaying) {
+    music.volume = 0.2; // soft volume
+    music.play();
+    isPlaying = true;
+  }
+}
+
+// start music on first user interaction
+document.body.addEventListener("click", playMusic, { once: true });
+
+// Beautiful romantic chord progression: Cmaj7, Am7, Fmaj7, G7
+const chords = [
+  [261.63, 329.63, 392.00, 493.88], // Cmaj7
+  [220.00, 261.63, 329.63, 415.30], // Am7
+  [174.61, 220.00, 261.63, 349.23], // Fmaj7
+  [196.00, 246.94, 293.66, 391.00], // G7
+];
+let chordIdx = 0;
+
+function playChord(freqs) {
+  if (!audioCtx) return;
+  freqs.forEach(freq => {
+    const osc  = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.4);
+    gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 2.5);
+    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 3.5);
+    osc.connect(gain); gain.connect(masterGain);
+    osc.start(); osc.stop(audioCtx.currentTime + 3.8);
+    nodes.push(osc);
+  });
+
+  // Soft pad overtone
+  const pad = audioCtx.createOscillator();
+  const padGain = audioCtx.createGain();
+  pad.type = 'triangle';
+  pad.frequency.value = freqs[0] / 2;
+  padGain.gain.setValueAtTime(0, audioCtx.currentTime);
+  padGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1);
+  padGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 3.8);
+  pad.connect(padGain); padGain.connect(masterGain);
+  pad.start(); pad.stop(audioCtx.currentTime + 4);
+}
+
+let musicInterval = null;
+
+function startMusic() {
+  if (!audioCtx) initAudio();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  isPlaying = true;
+  musicBtn.textContent = '♫'; musicBtn.classList.add('playing');
+  chordIdx = 0;
+  playChord(chords[chordIdx]);
+  musicInterval = setInterval(() => {
+    chordIdx = (chordIdx + 1) % chords.length;
+    playChord(chords[chordIdx]);
+  }, 3800);
+}
+
+function stopMusic() {
+  isPlaying = false;
+  musicBtn.textContent = '♪'; musicBtn.classList.remove('playing');
+  clearInterval(musicInterval);
+  nodes.forEach(n => { try { n.stop(); } catch(e){} });
+  nodes = [];
+}
+
+const musicBtn  = document.getElementById('musicBtn');
+const musicToast = document.getElementById('musicToast');
+
+// Show toast
+setTimeout(() => { musicToast.classList.add('show'); }, 2500);
+setTimeout(() => { musicToast.classList.remove('show'); }, 6000);
+
+musicBtn.addEventListener('click', () => {
+  if (isPlaying) stopMusic(); else startMusic();
+});
+
+// ══════════════════════════════════════════════════════════
+// SCREEN TRANSITION
+// ══════════════════════════════════════════════════════════
+const overlay = document.getElementById('transitionOverlay');
+const burst   = document.getElementById('transitionBurst');
+const hero    = document.getElementById('hero');
+const memoriesScreen = document.getElementById('memories');
+
+document.getElementById('openBtn').addEventListener('click', () => {
+  if (!isPlaying) startMusic();
+
+  // Burst overlay
+  overlay.classList.add('show');
+  burst.style.animation = 'none';
+  void burst.offsetWidth;
+  burst.style.animation = 'burstSpin 0.8s ease forwards';
+
+  setTimeout(() => {
+    hero.classList.remove('active');
+    memoriesScreen.classList.add('active');
+    revealCards();
+  }, 600);
+
+  setTimeout(() => {
+    overlay.classList.remove('show');
+  }, 900);
+});
+
+// ══════════════════════════════════════════════════════════
+// STAGGERED CARD REVEAL (Intersection Observer)
+// ══════════════════════════════════════════════════════════
+function revealCards() {
+  const cards = document.querySelectorAll('.card, .wish-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const delay = parseInt(entry.target.dataset.delay || 0);
+        setTimeout(() => {
+          entry.target.classList.add('reveal');
+        }, delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+  cards.forEach(card => observer.observe(card));
+
+  // Flip sparkle burst
+  document.querySelectorAll('.flip-zone').forEach(zone => {
+    zone.addEventListener('click', (e) => {
+      const isNowFlipped = zone.classList.contains('flipped');
+      if (isNowFlipped) {
+        for (let i = 0; i < 6; i++) {
+          const spark = document.createElement('div');
+          const sparkEmojis = ['💖','✨','🌸','💕','⭐'];
+          spark.textContent = sparkEmojis[Math.floor(Math.random()*sparkEmojis.length)];
+          spark.style.cssText = `
+            position:fixed; pointer-events:none; z-index:9990;
+            font-size:${Math.random()*1+0.7}rem;
+            left:${e.clientX + (Math.random()-0.5)*80}px;
+            top:${e.clientY + (Math.random()-0.5)*80}px;
+            animation: sparkFly 0.9s ease forwards;
+            transform-origin: center;
+          `;
+          document.body.appendChild(spark);
+          setTimeout(() => spark.remove(), 950);
+        }
+      }
+    });
+  });
+}
+
+// Inject sparkFly keyframe dynamically
+const sparkStyle = document.createElement('style');
+sparkStyle.textContent = `
+  @keyframes sparkFly {
+    0%   { opacity:1; transform: translate(0,0) scale(1) rotate(0deg); }
+    100% { opacity:0; transform: translate(${Math.random()>0.5?'':'-'}${30+Math.random()*40}px, -${40+Math.random()*50}px) scale(0.3) rotate(${Math.random()*360}deg); }
+  }
+`;
+document.head.appendChild(sparkStyle);
+</script>
+</body>
+</html>
